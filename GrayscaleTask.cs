@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace Recognizer
+﻿namespace Recognizer
 {
-	public static class GrayscaleTask
-	{
-		/* 
+    public static class GrayscaleTask
+    {
+        /* 
 		 * Переведите изображение в серую гамму.
 		 * 
 		 * original[x, y] - массив пикселей с координатами x, y. 
@@ -20,21 +18,20 @@ namespace Recognizer
 		 * http://ru.wikipedia.org/wiki/Оттенки_серого
 		 */
 
-		public static double[,] ToGrayscale(Pixel[,] original)
-		{
-			var rows = original.GetUpperBound(0) + 1;
-			var colums = original.Length / rows;
-            double[,] result = new double[rows, colums];
-            for (int i=0; i < rows; i++ )
-			{
-				for ( int j=0; j < colums; j++)
-				{
-					var pix = original[i, j];
-                    var bright = (pix.R * 0.299 + pix.G * 0.587 + pix.B * 0.114) / 255;
-					result[i, j] = bright;
+        public static double[,] ToGrayscale(Pixel[,] original)
+        {
+            var result = new double[original.GetLength(0), original.GetLength(1)];
+            var rows = original.GetLength(0);
+            var columns = original.GetLength(1);
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < columns; j++)
+                {
+                    result[i, j] = (0.299 * original[i, j].R + 0.587 * original[i, j].G + 0.114 * original[i, j].B) / 255;
+
                 }
-			}
-			return result;
-		}
-	}
+            }
+            return result;
+        }
+    }
 }

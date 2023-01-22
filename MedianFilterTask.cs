@@ -1,37 +1,46 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Recognizer
 {
-	internal static class MedianFilterTask
-	{
-		/* 
-		 * Для борьбы с пиксельным шумом, подобным тому, что на изображении,
-		 * обычно применяют медианный фильтр, в котором цвет каждого пикселя, 
-		 * заменяется на медиану всех цветов в некоторой окрестности пикселя.
-		 * https://en.wikipedia.org/wiki/Median_filter
-		 * 
-		 * Используйте окно размером 3х3 для не граничных пикселей,
-		 * Окно размером 2х2 для угловых и 3х2 или 2х3 для граничных.
-		 */
-		public static double[,] MedianFilter(double[,] original)
-		{
-            var rows = original.GetUpperBound(0) + 1;
-            var colums = original.Length / rows;
-			double median = 0;
+    internal static class MedianFilterTask
+    {
+        public static double[,] MedianFilter(double[,] original)
+        {
+            var result = new double[original.GetLength(0), original.GetLength(1)];
+            var rows = original.GetLength(0);
+            var columns = original.GetLength(1);
+            List<double> values = new List<double>();
             for (int i = 0; i < rows; i++)
             {
-                for (int j = 0; j < colums; j++)
+                for (int j = 0; j < columns; j++)
                 {
-					var pix = original[i, j];
-					if (pix == 0 || pix == 1)
-					{
-
-					}
-						
+                    values.Clear();
+                    var iStart = i == 0 ? 0 : i - 1;
+                    var iEnd = i == rows - 1 ? i : i + 1;
+                    var jStart = j == 0 ? 0 : j - 1;
+                    var jEnd = j == columns - 1 ? j : j + 1;
+                    for (int m = iStart; m <= iEnd; m++)
+                    {
+                        for (int n = jStart; n <= jEnd; n++)
+                        {
+                            values.Add(original[m, n]);
+                        }
+                    }
+                    values = values.OrderBy(x => x).ToList();
+                    if (values.Count % 2 == 0)
+                    {
+                        int median = values.Count / 2;
+                        result[i, j] = (values[median] + values[median - 1]) / 2;
+                    }
+                    else
+                    {
+                        int median = (values.Count - 1) / 2;
+                        result[i, j] = values[median];
+                    }
                 }
             }
-            return original;
-		}
-	}
+            return result;
+        }
+    }
 }
