@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Recognizer
@@ -18,18 +19,37 @@ namespace Recognizer
         {
             var rows = original.GetUpperBound(0) + 1;
             var colums = original.Length / rows;
-            double median = 0;
+            double[,] result = new double[rows, colums];
+            List<double> values = new List<double>();
             for (int i = 0; i < rows; i++)
             {
                 for (int j = 0; j < colums; j++)
                 {
-                    var pix = original[i, j];
-                    if (pix == 0 || pix == 1)
+                    var iStart = i == 0 ? 0 : i - 1;
+                    var iEnd = i == rows - 1 ? i : i + 1;
+                    var jStart = j == 0 ? 0 : j - 1;
+                    var jEnd = j == colums - 1 ? j : j + 1;
+                    for (int x = iStart; x < iEnd; x++)
                     {
+                        for (int y = jStart; y < jEnd; y++)
+                        {
+                            values.Add(original[x, y]);
+                        }
                     }
+                    values = values.OrderBy(x => x).ToList();
+                    if (values.Count % 2 == 0)
+                    {
+                        int middle = values.Count / 2;
+                        result[i,j] = (values[middle+1] + values[middle])/2;
+                    }
+                    else
+                    {
+                        result[i, j] = (values.Count + 1) / 2;
+                    }
+                    
                 }
             }
-            return original;
+            return result;
         }
     }
 }
