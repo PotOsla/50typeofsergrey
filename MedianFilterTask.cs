@@ -25,13 +25,14 @@ namespace Recognizer
             {
                 for (int j = 0; j < colums; j++)
                 {
+                    values.Clear();
                     var iStart = i == 0 ? 0 : i - 1;
                     var iEnd = i == rows - 1 ? i : i + 1;
                     var jStart = j == 0 ? 0 : j - 1;
                     var jEnd = j == colums - 1 ? j : j + 1;
-                    for (int x = iStart; x < iEnd; x++)
+                    for (int x = iStart; x <= iEnd; x++)
                     {
-                        for (int y = jStart; y < jEnd; y++)
+                        for (int y = jStart; y <= jEnd; y++)
                         {
                             values.Add(original[x, y]);
                         }
@@ -40,7 +41,7 @@ namespace Recognizer
                     if (values.Count % 2 == 0)
                     {
                         int middle = values.Count / 2;
-                        result[i,j] = (values[middle-1] + values[middle])/2;
+                        result[i,j] = (values[middle] + values[middle-1])/2;
                     }
                     else
                     {
