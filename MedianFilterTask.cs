@@ -19,7 +19,7 @@ namespace Recognizer
         {
             var rows = original.GetUpperBound(0) + 1;
             var colums = original.Length / rows;
-            double[,] result = new double[rows, colums];
+            var result = new double[rows, colums];
             List<double> values = new List<double>();
             for (int i = 0; i < rows; i++)
             {
@@ -40,11 +40,11 @@ namespace Recognizer
                     if (values.Count % 2 == 0)
                     {
                         int middle = values.Count / 2;
-                        result[i,j] = (values[middle+1] + values[middle])/2;
+                        result[i,j] = (values[middle-1] + values[middle])/2;
                     }
                     else
                     {
-                        result[i, j] = (values.Count + 1) / 2;
+                        result[i, j] = values[(values.Count - 1) / 2];
                     }
                     
                 }
