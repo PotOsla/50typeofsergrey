@@ -37,7 +37,7 @@ namespace Recognizer
                             values.Add(original[x, y]);
                         }
                     }
-                    values = values.OrderBy(x => x).ToList();
+                    values = values.OrderBy(_ => _).ToList();
                     if (values.Count % 2 == 0)
                     {
                         int middle = values.Count / 2;
