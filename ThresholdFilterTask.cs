@@ -20,12 +20,13 @@ namespace Recognizer
                 }
             }
             values = values.OrderByDescending(_ => _).ToList();
-            var threshold = values[(int)Math.Round(whitePixelsFraction * rows)];
+            var nWhite = (int)(whitePixelsFraction * (original.Length));
+            var threshold = values[nWhite-1];
             for (int i = 0; i < rows; i++)
             {
                 for (int j = 0; j < columns; j++)
                 {
-                    result[i,j] = original[i,j] == threshold ? 1 : 0;
+                    result[i,j] = original[i,j] >= threshold ? 1 : 0;
                 }
             }
         return result;
